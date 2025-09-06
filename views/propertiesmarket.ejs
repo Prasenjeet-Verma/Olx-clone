@@ -1,0 +1,49 @@
+<%- include('partials/head') %>
+</head>
+<body class="bg-gray-100 text-black">
+  <%- include('partials/specificOnlyHeader') %>
+
+<div class="max-w-6xl mx-auto py-8">
+  <h1 class="text-2xl font-bold mb-6">All Properties</h1>
+
+  <% if (properties.length === 0) { %>
+    <p class="text-gray-600">No properties available.</p>
+  <% } else { %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% properties.forEach(property => { %>
+        <div 
+          class="bg-white rounded-lg shadow overflow-hidden cursor-pointer hover:shadow-lg transition"
+          onclick="window.location.href='/properties/<%= property._id %>'"
+        >
+          <% if (property.photos && property.photos.length > 0) { %>
+            <img src="<%= property.photos[0] %>" alt="<%= property.adTitle %>" class="w-full h-48 object-cover">
+          <% } else { %>
+            <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+              No Image
+            </div>
+          <% } %>
+
+          <div class="p-4">
+            <h2 class="text-lg font-semibold"><%= property.adTitle %></h2>
+            <p><strong>Type:</strong> <%= property.houseType %></p>
+            <p><strong>BHK:</strong> <%= property.bhk %></p>
+            <p><strong>Bathrooms:</strong> <%= property.bathrooms %></p>
+            <p><strong>Furnishing:</strong> <%= property.furnishing %></p>
+            <p><strong>Status:</strong> <%= property.projectStatus %></p>
+            <p><strong>Listed By:</strong> <%= property.listedBy %></p>
+            <% if(property.totalFloors) { %>
+              <p><strong>Total Floors:</strong> <%= property.totalFloors %></p>
+            <% } %>
+            <p class="text-green-600 font-semibold">₹ <%= property.price.toLocaleString() %></p>
+            <p class="text-sm text-gray-500 mt-2">
+              <strong>Seller:</strong> <%= property.seller ? property.seller.username : 'Unknown' %>
+            </p>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+</body>
+</html>

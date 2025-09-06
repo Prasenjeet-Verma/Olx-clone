@@ -1,0 +1,52 @@
+<%- include('partials/head') %>
+</head>
+</head>
+<body class="bg-gray-100">
+ <%- include('partials/header') %>
+  <div class="max-w-5xl mx-auto p-6">
+    <!-- Property Photos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <% if (property.photos && property.photos.length > 0) { %>
+        <% property.photos.forEach(photo => { %>
+          <img src="<%= photo %>" alt="Property Photo" class="w-full h-64 object-cover rounded-lg shadow">
+        <% }) %>
+      <% } else { %>
+        <div class="w-full h-64 bg-gray-300 flex items-center justify-center rounded-lg">
+          <span>No Photos</span>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Property Info -->
+    <div class="mt-6 bg-white p-6 rounded-lg shadow">
+      <h1 class="text-2xl font-bold"><%= property.adTitle %></h1>
+      <p class="text-xl text-green-600 font-semibold">₹ <%= property.price %></p>
+      <p class="text-gray-500">Posted on <%= new Date(property.createdAt).toLocaleDateString() %></p>
+
+      <div class="mt-4">
+        <p><strong>House Type:</strong> <%= property.houseType %></p>
+        <p><strong>BHK:</strong> <%= property.bhk %></p>
+        <p><strong>Bathrooms:</strong> <%= property.bathrooms %></p>
+        <p><strong>Furnishing:</strong> <%= property.furnishing %></p>
+        <p><strong>Project Status:</strong> <%= property.projectStatus %></p>
+        <p><strong>Listed By:</strong> <%= property.listedBy %></p>
+        <p><strong>Total Floors:</strong> <%= property.totalFloors %></p>
+        <p><strong>Location:</strong> <%= property.city %>, <%= property.state %></p>
+      </div>
+    </div>
+
+    <!-- Seller Info -->
+    <div class="mt-6 bg-white p-6 rounded-lg shadow">
+      <h2 class="text-lg font-semibold mb-2">Seller Information</h2>
+      <div class="flex items-center space-x-4">
+        <img src="<%= property.seller.profilePic %>" alt="Seller" class="w-16 h-16 rounded-full object-cover">
+        <div>
+          <p class="font-semibold"><%= property.seller.username %></p>
+          <p class="text-gray-600">📞 <%= property.seller.mobileno %></p>
+          <p class="text-gray-500 text-sm">Member since <%= new Date(property.seller.createdAt).toLocaleDateString() %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

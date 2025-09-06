@@ -1,0 +1,199 @@
+<%- include('partials/head') %> 
+</head>
+<body class="bg-gray-100">
+    <%- include('partials/header') %>
+
+  <!-- Categories -->
+  <div class="bg-white p-3 rounded-lg shadow mb-6">
+    <div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-4 text-gray-700">
+      <!-- Cars -->
+      <a href="/carsonly" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100 rounded transition text-center">
+        <img src="/images/icons/car.png" alt="Cars" class="w-10 h-10 mb-1 object-contain">
+        <span class="text-xs font-medium">Cars</span>
+      </a>
+
+      <!-- Properties -->
+      <a href="/propertyonly" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100 rounded transition text-center">
+        <img src="/images/icons/property.png" alt="Properties" class="w-10 h-10 mb-1 object-contain">
+        <span class="text-xs font-medium">Properties</span>
+      </a>
+
+      <!-- Mobiles -->
+      <a href="/mobileandtabletonly" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100 rounded transition text-center">
+        <img src="/images/icons/mobile.png" alt="Mobiles" class="w-10 h-10 mb-1 object-contain">
+        <span class="text-xs font-medium">Mobiles</span>
+      </a>
+
+      <!-- Jobs -->
+      <a href="/jobsonly" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100 rounded transition text-center">
+        <img src="/images/icons/job.png" alt="Jobs" class="w-10 h-10 mb-1 object-contain">
+        <span class="text-xs font-medium">Jobs</span>
+      </a>
+
+      <!-- Fashion -->
+      <a href="/fashionandbeautyonly" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100 rounded transition text-center">
+        <img src="/images/icons/fashion.png" alt="Fashion" class="w-10 h-10 mb-1 object-contain">
+        <span class="text-xs font-medium">Fashion</span>
+      </a>
+
+      <!-- Bikes -->
+      <a href="/bikesonly" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100 rounded transition text-center">
+        <img src="/images/icons/bike.png" alt="Bikes" class="w-10 h-10 mb-1 object-contain">
+        <span class="text-xs font-medium">Bikes</span>
+      </a>
+
+      <!-- Electronics -->
+      <a href="/electronicsonly" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100 rounded transition text-center">
+        <img src="/images/icons/electronics.png" alt="Electronics" class="w-10 h-10 mb-1 object-contain">
+        <span class="text-xs font-medium">Electronics</span>
+      </a>
+
+      <!-- Commercial -->
+      <a href="/commercialvehiclesonly" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100 rounded transition text-center">
+        <img src="/images/icons/commercial.png" alt="Commercial Vehicles" class="w-10 h-10 mb-1 object-contain">
+        <span class="text-xs font-medium">Commercial Vehicles</span>
+      </a>
+
+      <!-- Furniture -->
+      <a href="/furnituresonly" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100 rounded transition text-center">
+        <img src="/images/icons/furniture.png" alt="Furniture" class="w-10 h-10 mb-1 object-contain">
+        <span class="text-xs font-medium">Furniture</span>
+      </a>
+
+      <!-- Pets -->
+      <a href="/petsonly" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100 rounded transition text-center">
+        <img src="/images/icons/pets.png" alt="Pets" class="w-10 h-10 mb-1 object-contain">
+        <span class="text-xs font-medium">Pets</span>
+      </a>
+    </div>
+  </div>
+
+<!-- Main Section -->
+<div class="px-2 pt-3 pb-20"> <!-- reduced padding -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2"> <!-- tighter gap -->
+
+    <!-- Cars -->
+    <% cars.forEach(car => { %>
+      <div class="bg-white rounded-md shadow-sm overflow-hidden group relative cursor-pointer"
+           onclick="window.location.href='/cars/<%= car._id %>'">
+        
+        <!-- Favorite Heart -->
+        <button 
+          class="absolute top-2 right-2 bg-white p-1 rounded-full shadow hover:scale-110 transition"
+          onclick="event.stopPropagation(); toggleFavorite('<%= car._id %>', 'Car')">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               id="heart-Car-<%= car._id %>" 
+               class="h-5 w-5 transition <%= currentUser.favorites.some(f => f.itemId.toString() === car._id.toString() && f.itemType === 'Car') 
+                     ? 'text-red-500' : 'text-gray-500' %>" 
+               fill="<%= currentUser.favorites.some(f => f.itemId.toString() === car._id.toString() && f.itemType === 'Car') ? 'red' : 'none' %>" 
+               viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
+                     2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 
+                     4.5 2.09C13.09 3.81 14.76 3 16.5 
+                     3 19.58 3 22 5.42 22 8.5c0 
+                     3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </button>
+
+        <!-- Image -->
+        <% if (car.photos && car.photos.length > 0) { %>
+          <img src="<%= car.photos[0] %>" alt="<%= car.adTitle %>" class="w-full h-32 object-cover"> <!-- reduced height -->
+        <% } else { %>
+          <img src="/images/no-image.png" alt="No Photo" class="w-full h-32 object-cover">
+        <% } %>
+
+        <!-- Details -->
+        <div class="p-2">
+          <h3 class="font-medium text-sm truncate"><%= car.adTitle %></h3>
+          <p class="text-green-600 font-semibold text-sm">₹ <%= car.price.toLocaleString() %></p>
+          <p class="text-xs text-gray-600 truncate"><%= car.city %>, <%= car.state %></p>
+          <p class="text-xs text-gray-400">Posted on <%= new Date(car.createdAt).toLocaleDateString() %></p>
+        </div>
+      </div>
+    <% }) %>
+
+  <!-- Properties -->
+<% properties.forEach(property => { %>
+  <div class="bg-white rounded-md shadow-sm overflow-hidden group relative cursor-pointer"
+       onclick="window.location.href='/properties/<%= property._id %>'">
+    
+    <!-- Favorite Heart -->
+    <button 
+      class="absolute top-2 right-2 bg-white p-1 rounded-full shadow hover:scale-110 transition"
+      onclick="event.stopPropagation(); toggleFavorite('<%= property._id %>', 'Property')">
+      <svg xmlns="http://www.w3.org/2000/svg" 
+           id="heart-Property-<%= property._id %>" 
+           class="h-5 w-5 transition <%= currentUser.favorites.some(f => f.itemId.toString() === property._id.toString() && f.itemType === 'Property') 
+                 ? 'text-red-500' : 'text-gray-500' %>" 
+           fill="<%= currentUser.favorites.some(f => f.itemId.toString() === property._id.toString() && f.itemType === 'Property') ? 'red' : 'none' %>" 
+           viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
+                 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 
+                 4.5 2.09C13.09 3.81 14.76 3 16.5 
+                 3 19.58 3 22 5.42 22 8.5c0 
+                 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    </button>
+
+    <!-- Property Image -->
+    <% if (property.photos && property.photos.length > 0) { %>
+      <img src="<%= property.photos[0] %>" alt="<%= property.adTitle %>" class="w-full h-32 object-cover">
+    <% } else { %>
+      <img src="/images/no-image.png" alt="No Photo" class="w-full h-32 object-cover">
+    <% } %>
+
+    <!-- Details -->
+    <div class="p-2">
+      <h3 class="font-medium text-sm truncate"><%= property.adTitle %></h3>
+      <p class="text-green-600 font-semibold text-sm">₹ <%= property.price.toLocaleString() %></p>
+      <p class="text-xs text-gray-600 truncate"><%= property.city %>, <%= property.state %></p>
+      <p class="text-xs text-gray-400">Posted on <%= new Date(property.createdAt).toLocaleDateString() %></p>
+    </div>
+  </div>
+<% }) %>
+
+
+  </div>
+</div>
+
+  <!-- Floating SELL Button -->
+  <footer class="fixed bottom-6 w-full flex justify-center">
+    <a href="/choosecategory" class="relative">
+      <div class="p-[3px] bg-[conic-gradient(at_top_left,_#FACC15,_#2DD4BF,_#3B82F6,_#FACC15)] rounded-full">
+        <div class="flex items-center gap-2 px-5 py-2 bg-white rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          <span class="text-blue-800 font-bold text-base">SELL</span>
+        </div>
+      </div>
+    </a>
+  </footer>
+
+  <script>
+    async function toggleFavorite(id, type) {
+      try {
+        const res = await fetch("/toggle", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, type })
+        });
+        const data = await res.json();
+
+        const heart = document.getElementById(`heart-${type}-${id}`);
+        if (data.isFavorite) {
+          heart.setAttribute("fill", "red");
+          heart.classList.remove("text-gray-500");
+          heart.classList.add("text-red-500");
+        } else {
+          heart.setAttribute("fill", "none");
+          heart.classList.remove("text-red-500");
+          heart.classList.add("text-gray-500");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>

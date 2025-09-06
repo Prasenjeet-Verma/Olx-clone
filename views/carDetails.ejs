@@ -1,0 +1,51 @@
+<%- include('partials/head') %>
+</head>
+</head>
+<body class="bg-gray-100">
+ <%- include('partials/header') %>
+  <div class="max-w-5xl mx-auto p-6">
+    <!-- Car Photos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <% if (car.photos && car.photos.length > 0) { %>
+        <% car.photos.forEach(photo => { %>
+          <img src="<%= photo %>" alt="Car Photo" class="w-full h-64 object-cover rounded-lg shadow">
+        <% }) %>
+      <% } else { %>
+        <div class="w-full h-64 bg-gray-300 flex items-center justify-center rounded-lg">
+          <span>No Photos</span>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Car Info -->
+    <div class="mt-6 bg-white p-6 rounded-lg shadow">
+      <h1 class="text-2xl font-bold"><%= car.adTitle %></h1>
+      <p class="text-xl text-green-600 font-semibold">₹ <%= car.price %></p>
+      <p class="text-gray-500">Posted on <%= new Date(car.createdAt).toLocaleDateString() %></p>
+
+      <div class="mt-4">
+        <p><strong>Brand:</strong> <%= car.brand %></p>
+        <p><strong>Model:</strong> <%= car.model %></p>
+        <p><strong>Year:</strong> <%= car.year %></p>
+        <p><strong>Fuel:</strong> <%= car.fuel %></p>
+        <p><strong>Transmission:</strong> <%= car.transmission %></p>
+        <p><strong>Kilometers Driven:</strong> <%= car.kmDriven %> km</p>
+        <p><strong>Location:</strong> <%= car.city %>, <%= car.state %></p>
+      </div>
+    </div>
+
+    <!-- Seller Info -->
+    <div class="mt-6 bg-white p-6 rounded-lg shadow">
+      <h2 class="text-lg font-semibold mb-2">Seller Information</h2>
+      <div class="flex items-center space-x-4">
+        <img src="<%= car.seller.profilePic %>" alt="Seller" class="w-16 h-16 rounded-full object-cover">
+        <div>
+          <p class="font-semibold"><%= car.seller.username %></p>
+          <p class="text-gray-600">📞 <%= car.seller.mobileno %></p>
+          <p class="text-gray-500 text-sm">Member since <%= new Date(car.seller.createdAt).toLocaleDateString() %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

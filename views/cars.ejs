@@ -1,0 +1,220 @@
+<%- include('partials/head') %>
+</head>
+<body class="bg-white text-black">
+  <%- include('partials/sellHeader') %>
+  <form action="/cars" method="POST" enctype="multipart/form-data" class="max-w-md mx-auto p-6 bg-white rounded-lg shadow space-y-4">
+  <h2 class="text-xl font-bold mb-4">Post a Car Ad</h2>
+
+  <!-- ✅ Location Section Added -->
+  <div class="border-b mb-4 flex">
+    <button type="button" id="listTab" class="px-4 py-2 border-b-2 border-blue-600 font-semibold">LIST</button>
+    <button type="button" id="currentTab" class="px-4 py-2 border-b-2 border-transparent">CURRENT LOCATION</button>
+  </div>
+
+  <!-- LIST TAB -->
+  <div id="listSection">
+    <!-- State -->
+    <select name="state" id="stateSelect" class="w-full border px-3 py-2 rounded mb-3" required>
+      <option value="">Select Region</option>
+      <option value="England">England</option>
+      <option value="Scotland">Scotland</option>
+      <option value="Wales">Wales</option>
+      <option value="Northern Ireland">Northern Ireland</option>
+    </select>
+
+    <!-- City -->
+    <select name="city" id="citySelect" class="w-full border px-3 py-2 rounded" required>
+      <option value="">Select City</option>
+    </select>
+  </div>
+
+  <!-- CURRENT LOCATION TAB -->
+  <div id="currentSection" class="hidden">
+    <p class="text-sm text-gray-600">Click below to detect your current location:</p>
+    <button type="button" id="detectLocation" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded">Use My Location</button>
+    <p id="locationResult" class="mt-2 text-green-600 text-sm"></p>
+  </div>
+  <!-- ✅ End Location Section -->
+
+  <!-- Brand -->
+  <input type="text" name="brand" placeholder="Brand" class="w-full border px-3 py-2 rounded" required>
+
+  <!-- Model -->
+  <input type="text" name="model" placeholder="Model" class="w-full border px-3 py-2 rounded">
+
+  <!-- Year -->
+  <input type="number" name="year" placeholder="Year" class="w-full border px-3 py-2 rounded" required>
+
+  <!-- Fuel -->
+  <select name="fuel" class="w-full border px-3 py-2 rounded" required>
+    <option value="">Select Fuel</option>
+    <option value="Petrol">Petrol</option>
+    <option value="Diesel">Diesel</option>
+    <option value="Electric">Electric</option>
+    <option value="Hybrid">Hybrid</option>
+  </select>
+
+  <!-- Transmission -->
+  <select name="transmission" class="w-full border px-3 py-2 rounded" required>
+    <option value="">Select Transmission</option>
+    <option value="Manual">Manual</option>
+    <option value="Automatic">Automatic</option>
+  </select>
+
+  <!-- KM Driven -->
+  <input type="number" name="kmDriven" placeholder="KM Driven" class="w-full border px-3 py-2 rounded" required>
+
+  <!-- Ad Title -->
+  <input type="text" name="adTitle" placeholder="Ad Title" class="w-full border px-3 py-2 rounded" required>
+
+  <!-- Price -->
+  <input type="number" name="price" placeholder="Price" class="w-full border px-3 py-2 rounded" required>
+
+  <!-- Car Photos Upload -->
+<!-- Car Photos Upload -->
+<div class="flex flex-col items-center">
+  <label for="carPhotos" class="cursor-pointer relative group">
+    <img 
+      src="/images/upload-placeholder.png"  
+      alt="Upload Car Photo" 
+      class="w-24 h-24 rounded-full shadow object-cover border border-gray-200"
+    />
+    <span class="absolute inset-0 bg-black bg-opacity-40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+      <span class="text-white text-sm">Upload</span>
+    </span>
+  </label>
+  <input 
+    type="file" 
+    name="photos" 
+    id="carPhotos" 
+    accept="image/*" 
+    class="hidden" 
+    multiple 
+  />
+</div>
+
+<!-- Container for multiple previews -->
+<div id="carPreviewContainer" class="flex flex-wrap gap-3 mt-3"></div>
+
+  <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Post Car</button>
+</form>
+<script>
+const carInput = document.getElementById('carPhotos');
+const carPreviewContainer = document.getElementById('carPreviewContainer');
+
+carInput.addEventListener('change', () => {
+  carPreviewContainer.innerHTML = ""; // clear old previews
+
+  if (carInput.files) {
+    [...carInput.files].forEach(file => {
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(file);
+      img.classList.add("w-24", "h-24", "rounded", "object-cover", "shadow");
+      carPreviewContainer.appendChild(img);
+    });
+  }
+});
+
+
+// ✅ Added Location Script
+const ukCities = {
+  England: ["London", "Manchester", "Birmingham", "Liverpool", "Leeds", "Newcastle", "Bristol", "Sheffield", "Nottingham"],
+  Scotland: ["Edinburgh", "Glasgow", "Aberdeen", "Dundee", "Inverness"],
+  Wales: ["Cardiff", "Swansea", "Newport", "Wrexham"],
+  "Northern Ireland": ["Belfast", "Londonderry", "Lisburn", "Newry"]
+};
+
+const stateSelect = document.getElementById("stateSelect");
+const citySelect = document.getElementById("citySelect");
+
+stateSelect.addEventListener("change", () => {
+  const selectedState = stateSelect.value;
+  citySelect.innerHTML = '<option value="">Select City</option>';
+  if (ukCities[selectedState]) {
+    ukCities[selectedState].forEach(city => {
+      const opt = document.createElement("option");
+      opt.value = city;
+      opt.textContent = city;
+      citySelect.appendChild(opt);
+    });
+  }
+});
+
+// Tab switching
+const listTab = document.getElementById("listTab");
+const currentTab = document.getElementById("currentTab");
+const listSection = document.getElementById("listSection");
+const currentSection = document.getElementById("currentSection");
+
+listTab.addEventListener("click", () => {
+  listSection.classList.remove("hidden");
+  currentSection.classList.add("hidden");
+  listTab.classList.add("border-blue-600");
+  currentTab.classList.remove("border-blue-600");
+});
+
+currentTab.addEventListener("click", () => {
+  listSection.classList.add("hidden");
+  currentSection.classList.remove("hidden");
+  currentTab.classList.add("border-blue-600");
+  listTab.classList.remove("border-blue-600");
+});
+
+// Detect current location
+// Detect current location + auto-fill state & city
+const detectBtn = document.getElementById("detectLocation");
+const result = document.getElementById("locationResult");
+
+detectBtn.addEventListener("click", () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const { latitude, longitude } = pos.coords;
+
+      try {
+        // Call OpenStreetMap Reverse Geocoding
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+        const data = await res.json();
+
+        // Extract address info
+        const city = data.address.city || data.address.town || data.address.village;
+        const state = data.address.state;
+
+        result.textContent = `Detected: ${city}, ${state}`;
+
+        // Auto-fill State dropdown
+        if (state) {
+          const ukStates = ["England", "Scotland", "Wales", "Northern Ireland"];
+          const matchedState = ukStates.find(s => state.includes(s));
+          if (matchedState) {
+            stateSelect.value = matchedState;
+            stateSelect.dispatchEvent(new Event("change")); // trigger city reload
+          }
+        }
+
+        // Auto-fill City dropdown
+        if (city) {
+          setTimeout(() => {
+            const cityOption = [...citySelect.options].find(opt => opt.value.toLowerCase() === city.toLowerCase());
+            if (cityOption) {
+              citySelect.value = cityOption.value;
+            }
+          }, 300); // wait for state change to populate cities
+        }
+
+      } catch (err) {
+        console.error(err);
+        result.textContent = "Error detecting location.";
+      }
+    }, () => {
+      result.textContent = "Unable to detect location.";
+    });
+  } else {
+    result.textContent = "Geolocation is not supported.";
+  }
+});
+
+</script>
+
+
+</body>
+</html>

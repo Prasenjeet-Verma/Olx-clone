@@ -1,0 +1,66 @@
+<%- include("partials/head") %>
+</head>
+<body class="bg-gray-50">
+
+  <%- include("partials/header") %>
+
+  <div class="max-w-6xl mx-auto px-3 py-4">
+    <h2 class="text-xl font-bold mb-4">My Ads</h2>
+
+    <% if (myAds.length === 0) { %>
+      <p class="text-gray-600">You have not posted any ads yet.</p>
+    <% } else { %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        
+        <% myAds.forEach(ad => { %>
+          <% if (ad.type === "Car") { %>
+            <!-- Car Card -->
+            <div class="bg-white rounded-md shadow-sm overflow-hidden group relative cursor-pointer"
+                 onclick="window.location.href='/cars/<%= ad.data._id %>'">
+              
+              <!-- Image -->
+              <% if (ad.data.photos && ad.data.photos.length > 0) { %>
+                <img src="<%= ad.data.photos[0] %>" alt="<%= ad.data.adTitle %>" class="w-full h-32 object-cover">
+              <% } else { %>
+                <img src="/images/no-image.png" alt="No Photo" class="w-full h-32 object-cover">
+              <% } %>
+
+              <!-- Details -->
+              <div class="p-2">
+                <h3 class="font-medium text-sm truncate"><%= ad.data.adTitle %></h3>
+                <p class="text-green-600 font-semibold text-sm">₹ <%= ad.data.price.toLocaleString() %></p>
+                <p class="text-xs text-gray-600 truncate"><%= ad.data.city %>, <%= ad.data.state %></p>
+                <p class="text-xs text-gray-400">Posted on <%= new Date(ad.data.createdAt).toLocaleDateString() %></p>
+              </div>
+            </div>
+          <% } %>
+
+          <% if (ad.type === "Property") { %>
+            <!-- Property Card -->
+            <div class="bg-white rounded-md shadow-sm overflow-hidden group relative cursor-pointer"
+                 onclick="window.location.href='/properties/<%= ad.data._id %>'">
+              
+              <!-- Image -->
+              <% if (ad.data.photos && ad.data.photos.length > 0) { %>
+                <img src="<%= ad.data.photos[0] %>" alt="<%= ad.data.adTitle %>" class="w-full h-32 object-cover">
+              <% } else { %>
+                <img src="/images/no-image.png" alt="No Photo" class="w-full h-32 object-cover">
+              <% } %>
+
+              <!-- Details -->
+              <div class="p-2">
+                <h3 class="font-medium text-sm truncate"><%= ad.data.adTitle %></h3>
+                <p class="text-green-600 font-semibold text-sm">₹ <%= ad.data.price.toLocaleString() %></p>
+                <p class="text-xs text-gray-600 truncate"><%= ad.data.city %>, <%= ad.data.state %></p>
+                <p class="text-xs text-gray-400">Posted on <%= new Date(ad.data.createdAt).toLocaleDateString() %></p>
+              </div>
+            </div>
+          <% } %>
+        <% }) %>
+        
+      </div>
+    <% } %>
+  </div>
+
+</body>
+</html>

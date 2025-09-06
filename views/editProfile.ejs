@@ -1,0 +1,77 @@
+<%- include('partials/head') %>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <%- include('partials/header') %>
+
+  <div class="max-w-2xl mx-auto px-4 py-8">
+    <!-- Section: Basic Info -->
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Basic Information</h2>
+    
+    <form action="/edituserprofile" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-xl shadow-md space-y-6">
+      
+      <!-- Profile Image -->
+      <div class="flex flex-col items-center">
+        <label for="profileImage" class="cursor-pointer relative group">
+          <img 
+            src="<%= currentUser.profilePic ? currentUser.profilePic : '/uploads/default.png' %>" 
+            alt="Profile" 
+            class="w-24 h-24 rounded-full shadow object-cover border border-gray-200"
+            id="previewImage"
+          />
+          <!-- Hover effect -->
+          <span class="absolute inset-0 bg-black bg-opacity-40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+            <span class="text-white text-sm">Change</span>
+          </span>
+        </label>
+        <input 
+          type="file" 
+          name="profileImage" 
+          id="profileImage" 
+          accept="image/*" 
+          class="hidden" 
+        />
+      </div>
+
+      <!-- Username -->
+      <div>
+        <label class="block text-gray-700 text-sm font-medium mb-1">Username</label>
+        <input 
+          type="text" 
+          name="username" 
+          value="<%= currentUser.username %>" 
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        />
+      </div>
+
+      <!-- Save button -->
+      <div class="flex justify-end">
+        <button 
+          type="submit" 
+          class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          Save Changes
+        </button>
+      </div>
+    </form>
+
+    <!-- Section: Contact Info -->
+    <div class="mt-10">
+      <h2 class="text-xl font-semibold text-gray-800 mb-3">Contact Information</h2>
+      <div class="bg-white p-6 rounded-xl shadow-md space-y-2">
+        <p><span class="font-medium">Mobile:</span> <%= currentUser.mobileno %></p>
+        <p><span class="font-medium">Username:</span> <%= currentUser.username %></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional: Instant Preview -->
+  <script>
+    document.getElementById("profileImage").addEventListener("change", function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        document.getElementById("previewImage").src = URL.createObjectURL(file);
+      }
+    });
+  </script>
+</body>
+</html>

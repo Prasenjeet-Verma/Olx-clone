@@ -1,0 +1,45 @@
+<%- include('partials/head') %>
+</head>
+<body class="bg-gray-100 text-black">
+  <%- include('partials/specificOnlyHeader') %>
+
+  <div class="max-w-6xl mx-auto py-8">
+  <h1 class="text-2xl font-bold mb-6">All Cars</h1>
+
+  <% if (cars.length === 0) { %>
+    <p class="text-gray-600">No cars available.</p>
+  <% } else { %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% cars.forEach(car => { %>
+        <div 
+          class="bg-white rounded-lg shadow overflow-hidden cursor-pointer hover:shadow-lg transition"
+          onclick="window.location.href='/cars/<%= car._id %>'"
+        >
+          <% if (car.photos && car.photos.length > 0) { %>
+            <img src="<%= car.photos[0] %>" alt="<%= car.brand %>" class="w-full h-48 object-cover">
+          <% } else { %>
+            <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+              No Image
+            </div>
+          <% } %>
+
+          <div class="p-4">
+            <h2 class="text-lg font-semibold"><%= car.brand %> <%= car.model ? car.model : '' %></h2>
+            <p><strong>Year:</strong> <%= car.year %></p>
+            <p><strong>Fuel:</strong> <%= car.fuel %></p>
+            <p><strong>Transmission:</strong> <%= car.transmission %></p>
+            <p><strong>KM Driven:</strong> <%= car.kmDriven %> km</p>
+            <p class="text-green-600 font-semibold">₹ <%= car.price.toLocaleString() %></p>
+            <p class="text-sm text-gray-500 mt-2">
+              <strong>Seller:</strong> <%= car.seller ? car.seller.username : 'Unknown' %>
+            </p>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+
+</body>
+</html>

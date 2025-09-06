@@ -1,0 +1,220 @@
+<%- include('partials/head') %>
+</head>
+<body class="bg-white text-black">
+  <%- include('partials/sellHeader') %>
+
+  <form action="/postproperty" method="POST" enctype="multipart/form-data" class="max-w-md mx-auto p-6 bg-white rounded-lg shadow space-y-4">
+    <h2 class="text-xl font-bold mb-4">Post a Property Ad</h2>
+
+    <!-- ✅ Location Section -->
+    <div class="border-b mb-4 flex">
+      <button type="button" id="listTab" class="px-4 py-2 border-b-2 border-blue-600 font-semibold">LIST</button>
+      <button type="button" id="currentTab" class="px-4 py-2 border-b-2 border-transparent">CURRENT LOCATION</button>
+    </div>
+
+    <!-- LIST TAB -->
+    <div id="listSection">
+      <!-- State -->
+      <select name="state" id="stateSelect" class="w-full border px-3 py-2 rounded mb-3" required>
+        <option value="">Select Region</option>
+        <option value="England">England</option>
+        <option value="Scotland">Scotland</option>
+        <option value="Wales">Wales</option>
+        <option value="Northern Ireland">Northern Ireland</option>
+      </select>
+
+      <!-- City -->
+      <select name="city" id="citySelect" class="w-full border px-3 py-2 rounded" required>
+        <option value="">Select City</option>
+      </select>
+    </div>
+
+    <!-- CURRENT LOCATION TAB -->
+    <div id="currentSection" class="hidden">
+      <p class="text-sm text-gray-600">Click below to detect your current location:</p>
+      <button type="button" id="detectLocation" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded">Use My Location</button>
+      <p id="locationResult" class="mt-2 text-green-600 text-sm"></p>
+    </div>
+    <!-- ✅ End Location Section -->
+
+    <!-- House Type -->
+    <input type="text" name="houseType" placeholder="House Type (Apartment/Villa)" class="w-full border px-3 py-2 rounded" required>
+
+    <!-- BHK -->
+    <input type="number" name="bhk" placeholder="BHK" class="w-full border px-3 py-2 rounded" required>
+
+    <!-- Bathrooms -->
+    <input type="number" name="bathrooms" placeholder="Bathrooms" class="w-full border px-3 py-2 rounded" required>
+
+    <!-- Furnishing -->
+    <select name="furnishing" class="w-full border px-3 py-2 rounded">
+      <option value="">Select Furnishing</option>
+      <option value="Furnished">Furnished</option>
+      <option value="Semi-Furnished">Semi-Furnished</option>
+      <option value="Unfurnished">Unfurnished</option>
+    </select>
+
+    <!-- Project Status -->
+    <select name="projectStatus" class="w-full border px-3 py-2 rounded">
+      <option value="">Select Project Status</option>
+      <option value="Ready to move">Ready to move</option>
+      <option value="Under construction">Under construction</option>
+    </select>
+
+    <!-- Listed By -->
+    <select name="listedBy" class="w-full border px-3 py-2 rounded" required>
+      <option value="">Listed By</option>
+      <option value="Owner">Owner</option>
+      <option value="Builder">Builder</option>
+      <option value="Agent">Agent</option>
+    </select>
+
+    <!-- Total Floors -->
+    <input type="number" name="totalFloors" placeholder="Total Floors" class="w-full border px-3 py-2 rounded">
+
+    <!-- Ad Title -->
+    <input type="text" name="adTitle" placeholder="Ad Title" class="w-full border px-3 py-2 rounded" required>
+
+    <!-- Price -->
+    <input type="number" name="price" placeholder="Price" class="w-full border px-3 py-2 rounded" required>
+
+    <!-- ✅ Property Photos Upload (Multiple like Cars) -->
+    <div class="flex flex-col items-center">
+      <label for="propertyPhotos" class="cursor-pointer relative group">
+        <img 
+          src="/images/upload-placeholder.png"  
+          alt="Upload Property Photo" 
+          class="w-24 h-24 rounded-full shadow object-cover border border-gray-200"
+        />
+        <span class="absolute inset-0 bg-black bg-opacity-40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+          <span class="text-white text-sm">Upload</span>
+        </span>
+      </label>
+      <input 
+        type="file" 
+        name="photos" 
+        id="propertyPhotos" 
+        accept="image/*" 
+        class="hidden" 
+        multiple 
+      />
+    </div>
+
+    <!-- Previews -->
+    <div id="propertyPreviewContainer" class="flex flex-wrap gap-3 mt-3"></div>
+
+    <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Post Property</button>
+  </form>
+
+  <script>
+  // ✅ Image preview (multiple)
+  const propertyInput = document.getElementById('propertyPhotos');
+  const propertyPreviewContainer = document.getElementById('propertyPreviewContainer');
+
+  propertyInput.addEventListener('change', () => {
+    propertyPreviewContainer.innerHTML = "";
+    if (propertyInput.files) {
+      [...propertyInput.files].forEach(file => {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.classList.add("w-24", "h-24", "rounded", "object-cover", "shadow");
+        propertyPreviewContainer.appendChild(img);
+      });
+    }
+  });
+
+  // ✅ UK Cities
+  const ukCities = {
+    England: ["London", "Manchester", "Birmingham", "Liverpool", "Leeds", "Newcastle", "Bristol", "Sheffield", "Nottingham"],
+    Scotland: ["Edinburgh", "Glasgow", "Aberdeen", "Dundee", "Inverness"],
+    Wales: ["Cardiff", "Swansea", "Newport", "Wrexham"],
+    "Northern Ireland": ["Belfast", "Londonderry", "Lisburn", "Newry"]
+  };
+
+  const stateSelect = document.getElementById("stateSelect");
+  const citySelect = document.getElementById("citySelect");
+
+  stateSelect.addEventListener("change", () => {
+    const selectedState = stateSelect.value;
+    citySelect.innerHTML = '<option value="">Select City</option>';
+    if (ukCities[selectedState]) {
+      ukCities[selectedState].forEach(city => {
+        const opt = document.createElement("option");
+        opt.value = city;
+        opt.textContent = city;
+        citySelect.appendChild(opt);
+      });
+    }
+  });
+
+  // ✅ Tabs
+  const listTab = document.getElementById("listTab");
+  const currentTab = document.getElementById("currentTab");
+  const listSection = document.getElementById("listSection");
+  const currentSection = document.getElementById("currentSection");
+
+  listTab.addEventListener("click", () => {
+    listSection.classList.remove("hidden");
+    currentSection.classList.add("hidden");
+    listTab.classList.add("border-blue-600");
+    currentTab.classList.remove("border-blue-600");
+  });
+
+  currentTab.addEventListener("click", () => {
+    listSection.classList.add("hidden");
+    currentSection.classList.remove("hidden");
+    currentTab.classList.add("border-blue-600");
+    listTab.classList.remove("border-blue-600");
+  });
+
+  // ✅ Detect current location
+  const detectBtn = document.getElementById("detectLocation");
+  const result = document.getElementById("locationResult");
+
+  detectBtn.addEventListener("click", () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const { latitude, longitude } = pos.coords;
+
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+          const data = await res.json();
+
+          const city = data.address.city || data.address.town || data.address.village;
+          const state = data.address.state;
+
+          result.textContent = `Detected: ${city}, ${state}`;
+
+          if (state) {
+            const ukStates = ["England", "Scotland", "Wales", "Northern Ireland"];
+            const matchedState = ukStates.find(s => state.includes(s));
+            if (matchedState) {
+              stateSelect.value = matchedState;
+              stateSelect.dispatchEvent(new Event("change"));
+            }
+          }
+
+          if (city) {
+            setTimeout(() => {
+              const cityOption = [...citySelect.options].find(opt => opt.value.toLowerCase() === city.toLowerCase());
+              if (cityOption) {
+                citySelect.value = cityOption.value;
+              }
+            }, 300);
+          }
+
+        } catch (err) {
+          console.error(err);
+          result.textContent = "Error detecting location.";
+        }
+      }, () => {
+        result.textContent = "Unable to detect location.";
+      });
+    } else {
+      result.textContent = "Geolocation is not supported.";
+    }
+  });
+  </script>
+
+</body>
+</html>

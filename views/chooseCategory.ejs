@@ -1,0 +1,122 @@
+<%- include('partials/head') %>
+</head>
+<body class="bg-white text-black">
+  <%- include('partials/sellHeader') %>
+
+  <div class="max-w-md mx-auto px-4 py-6">
+    <h1 class="text-center text-lg font-bold mb-6">CHOOSE A CATEGORY</h1>
+
+    <div class="grid grid-cols-2 gap-px border-t border-l border-gray-200">
+      <!-- Card Template -->
+      <a href="/cars" class="flex flex-col items-center justify-center border-r border-b border-gray-200 bg-white py-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M5 16V13H19V16M3 13L5 6H19L21 13M7 16C7 16.5523 6.55228 17 6 17C5.44772 17 5 16.5523 5 16M19 16C19 16.5523 18.5523 17 18 17C17.4477 17 17 16.5523 17 16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="text-sm font-medium">CARS</span>
+      </a>
+
+      <a href="/properties" class="flex flex-col items-center justify-center border-r border-b border-gray-200 bg-white py-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M3 9.5L12 4L21 9.5V20C21 20.55 20.55 21 20 21H4C3.45 21 3 20.55 3 20V9.5Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="text-sm font-medium text-center">PROPERTIES</span>
+      </a>
+
+      <a href="/mobiles" class="flex flex-col items-center justify-center border-r border-b border-gray-200 bg-white py-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <rect x="7" y="2" width="10" height="20" rx="2" ry="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="18" r="1" />
+        </svg>
+        <span class="text-sm font-medium">MOBILES</span>
+      </a>
+
+      <a href="/jobs" class="flex flex-col items-center justify-center border-r border-b border-gray-200 bg-white py-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M4 7H20V20H4V7ZM16 3H8V7H16V3Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="text-sm font-medium">JOBS</span>
+      </a>
+
+      <a href="/bikes" class="flex flex-col items-center justify-center border-r border-b border-gray-200 bg-white py-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M5 17C6.65685 17 8 15.6569 8 14C8 12.3431 6.65685 11 5 11C3.34315 11 2 12.3431 2 14C2 15.6569 3.34315 17 5 17Z" stroke-width="2"/>
+          <path d="M19 17C20.6569 17 22 15.6569 22 14C22 12.3431 20.6569 11 19 11C17.3431 11 16 12.3431 16 14C16 15.6569 17.3431 17 19 17Z" stroke-width="2"/>
+          <path d="M5 14L12 14L14 11H18" stroke-width="2"/>
+        </svg>
+        <span class="text-sm font-medium">BIKES</span>
+      </a>
+
+      <a href="electronicsappliances" class="flex flex-col items-center justify-center border-r border-b border-gray-200 bg-white py-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <rect x="4" y="5" width="16" height="14" rx="2" ry="2" stroke-width="2" />
+          <path d="M8 2H16V6H8V2Z" fill="none" />
+        </svg>
+        <span class="text-xs font-medium text-center">ELECTRONICS & APPLIANCES</span>
+      </a>
+
+      <a href="/commercialsvehicles" class="flex flex-col items-center justify-center border-r border-b border-gray-200 bg-white py-6 px-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M3 7H17L20 10V17H3V7Z" stroke-width="2"/>
+          <circle cx="6" cy="17" r="2"/>
+          <circle cx="17" cy="17" r="2"/>
+        </svg>
+        <span class="text-xs font-medium text-center">COMMERCIAL VEHICLES & SPARES</span>
+      </a>
+
+      <a href="/moreoptions" class="flex flex-col items-center justify-center border-b border-gray-200 bg-white py-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-2 mb-4" fill="currentColor" viewBox="0 0 24 24">
+          <circle cx="5" cy="12" r="2"/>
+          <circle cx="12" cy="12" r="2"/>
+          <circle cx="19" cy="12" r="2"/>
+        </svg>
+        <span class="text-sm font-medium">MORE OPTIONS</span>
+      </a>
+    </div>
+  </div>
+     <!-- Footer Section -->
+<div class="w-full max-w-md mt-10 text-center">
+
+  <!-- Follow Us -->
+  <p class="text-gray-600 text-sm font-semibold mb-2">FOLLOW US</p>
+  <div class="flex justify-center gap-4 text-blue-600 text-xl mb-6">
+    <!-- You can replace these emojis/icons with Font Awesome or actual SVGs -->
+    <a href="#"><i class="fab fa-facebook-f"></i></a>
+   <a href="#" aria-label="Instagram" class="hover:text-pink-600">
+    <i class="fab fa-instagram"></i>
+  </a>
+
+  <a href="#" aria-label="YouTube" class="hover:text-red-600">
+    <i class="fab fa-youtube"></i>
+  </a>
+
+  <a href="#" aria-label="X (Twitter)" class="hover:text-black">
+    <i class="fab fa-x-twitter"></i> <!-- For Font Awesome 6+ -->
+    <!-- If you're using FA 5, use: <i class="fab fa-twitter"></i> -->
+  </a>
+
+  <a href="#" aria-label="WhatsApp" class="hover:text-green-600">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <a href="#" aria-label="LinkedIn" class="hover:text-blue-500">
+    <i class="fab fa-linkedin-in"></i>
+  </a>
+  </div>
+
+  <!-- Group Logos -->
+  <div class="bg-blue-900 text-white py-6 px-4 rounded-t-lg">
+    <p class="font-semibold text-sm mb-4">CarTrade <span class="text-white bg-blue-700 px-2 py-1 rounded">Tech</span> GROUP</p>
+
+    <div class="grid grid-cols-3 gap-4 text-xs font-medium mb-6">
+      <div>OLX</div>
+      <div>CarWale</div>
+      <div>BikeWale</div>
+      <div>CarTrade</div>
+      <div class="col-span-2">Mobility Outlook</div>
+    </div>
+
+    <p class="text-xs text-white/70">All rights reserved © 2006–2025 OLX</p>
+  </div>
+</div>
+</body>
+</html>

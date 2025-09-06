@@ -1,0 +1,231 @@
+<header class="shadow-md bg-white">
+  <% if (isLoggedIn) { %>
+  <!-- Navbar -->
+  <div
+    class="p-4 bg-gradient-to-r from-blue-100 via-white to-blue-100 flex items-center justify-between"
+  >
+    <!-- Left: Hamburger + Logo -->
+    <div class="flex items-center space-x-4">
+      <!-- Hamburger button -->
+      <button
+        id="menu-btn"
+        class="flex flex-col space-y-1 focus:outline-none group"
+      >
+        <span
+          class="block w-7 h-1 rounded bg-blue-600 group-hover:bg-blue-800 transition"
+        ></span>
+        <span
+          class="block w-7 h-1 rounded bg-blue-600 group-hover:bg-blue-800 transition"
+        ></span>
+        <span
+          class="block w-7 h-1 rounded bg-blue-600 group-hover:bg-blue-800 transition"
+        ></span>
+      </button>
+
+      <!-- Logo -->
+      <h1
+        class="text-2xl font-extrabold text-blue-700 tracking-wide drop-shadow"
+      >
+        Olx Copy
+      </h1>
+    </div>
+
+    <!-- Right: Location -->
+    <% if (currentPath !== "/userprofile" && currentPath !== "/edituserprofile")
+    { %>
+    <span class="text-gray-700 font-medium">📍 Your Location</span>
+    <% } else { %>
+    <!-- Placeholder keeps height -->
+    <span class="invisible">📍 Placeholder</span>
+    <% } %>
+  </div>
+
+  <!-- Search bar (below navbar) -->
+  <% if (currentPath !== "/userprofile" && currentPath !== "/edituserprofile" && currentPath !== "/myads") {
+  %>
+  <div class="flex justify-center px-4 pb-3">
+    <input
+      type="text"
+      placeholder="Search..."
+      class="w-full max-w-xl px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+  </div>
+  <% } %>
+
+  <!-- Overlay -->
+  <div
+    id="overlay"
+    class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"
+  ></div>
+
+  <!-- Side Menu -->
+  <div
+    id="side-menu"
+    class="fixed top-0 left-0 h-full w-80 max-w-xs bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col"
+  >
+    <!-- Header (no border-bottom now) -->
+    <div class="p-4 flex justify-between items-center bg-blue-50">
+      <h2 class="text-xl font-bold text-blue-700">Olx Copy</h2>
+      <button
+        id="close-btn"
+        class="text-gray-500 text-3xl font-bold hover:text-blue-700 transition"
+      >
+        &times;
+      </button>
+    </div>
+
+    <!-- Profile + Username + Button -->
+    <div class="p-6 text-center">
+      <!-- Profile row -->
+      <div class="flex items-center space-x-3 justify-center mb-4">
+        <img
+          src="<%= currentUser.profilePic ? currentUser.profilePic : '/uploads/default.png' %>"
+          alt="Profile"
+          class="w-16 h-16 rounded-full shadow"
+        />
+        <h3 class="font-semibold text-gray-800 text-lg">
+          <%= currentUser.username %>
+        </h3>
+      </div>
+
+      <!-- Button with border line after -->
+      <div>
+        <a
+          href="/userprofile"
+          class="block w-full px-4 py-2 bg-blue-600 text-white font-medium rounded shadow hover:bg-blue-700 transition"
+        >
+          View and edit profile
+        </a>
+        <div class="border-t mt-4"></div>
+      </div>
+    </div>
+
+    <!-- Menu Items -->
+    <div class="flex-1 overflow-y-auto">
+      <nav class="flex flex-col p-6 space-y-4">
+        <a
+          href="/choosecategory"
+          class="flex items-center text-gray-700 hover:text-blue-700 font-medium"
+        >
+          <span class="mr-3">📤</span> Start selling
+        </a>
+
+        <a
+          href="/myads"
+          class="flex items-center text-gray-700 hover:text-blue-700 font-medium"
+        >
+          <span class="mr-3">📄</span> My ADS
+        </a>
+        <a
+          href="/favorite"
+          class="flex items-center text-gray-700 hover:text-blue-700 font-medium"
+        >
+          <span class="mr-3">❤️</span> Wishlist
+        </a>
+        <a
+          href="#"
+          class="flex items-center text-gray-700 hover:text-blue-700 font-medium"
+        >
+          <span class="mr-3">💼</span> Buy Business Packages
+        </a>
+        <a
+          href="#"
+          class="flex items-center text-gray-700 hover:text-blue-700 font-medium"
+        >
+          <span class="mr-3">🛒</span> View Cart
+        </a>
+        <a
+          href="#"
+          class="flex items-center text-gray-700 hover:text-blue-700 font-medium"
+        >
+          <span class="mr-3">📦</span> Bought Packages & Billing
+        </a>
+        <a
+          href="#"
+          class="flex items-center justify-between text-gray-700 hover:text-blue-700 font-medium"
+        >
+          <span class="flex items-center"
+            ><span class="mr-3">⭐</span> Become an Elite Buyer</span
+          >
+          <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded"
+            >New</span
+          >
+        </a>
+        <a
+          href="#"
+          class="flex items-center text-gray-700 hover:text-blue-700 font-medium"
+        >
+          <span class="mr-3">💬</span> Chat
+        </a>
+        <a
+          href="#"
+          class="flex items-center text-gray-700 hover:text-blue-700 font-medium"
+        >
+          <span class="mr-3">🔔</span> Notifications
+        </a>
+      </nav>
+    </div>
+
+    <!-- Footer -->
+    <div class="p-6 border-t space-y-4">
+      <a
+        href="#"
+        class="flex items-center text-gray-700 hover:text-blue-700 font-medium"
+      >
+        <span class="mr-3">❓</span> Help
+      </a>
+      <a
+        href="#"
+        class="flex items-center text-gray-700 hover:text-blue-700 font-medium"
+      >
+        <span class="mr-3">🌐</span> Select language / भाषा चुनें
+      </a>
+      <a
+        href="/logout"
+        class="flex items-center text-red-600 hover:text-red-800 font-medium"
+      >
+        <span class="mr-3">🚪</span> Logout
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const closeBtn = document.getElementById("close-btn");
+    const sideMenu = document.getElementById("side-menu");
+    const overlay = document.getElementById("overlay");
+
+    menuBtn.addEventListener("click", () => {
+      sideMenu.classList.remove("-translate-x-full");
+      overlay.classList.remove("hidden");
+    });
+
+    closeBtn.addEventListener("click", () => {
+      sideMenu.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
+    });
+
+    overlay.addEventListener("click", () => {
+      sideMenu.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
+    });
+  </script>
+
+  <% } else { %>
+  <!-- If not logged in -->
+  <div
+    class="flex justify-end items-center p-4 bg-gradient-to-r from-blue-100 via-white to-blue-100 space-x-4"
+  >
+    <a
+      href="/usersignup"
+      class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 font-semibold shadow transition"
+      >Sign Up</a
+    >
+    <a
+      href="/"
+      class="px-4 py-2 rounded border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold shadow transition"
+      >Login</a
+    >
+  </div>
+  <% } %>
+</header>
