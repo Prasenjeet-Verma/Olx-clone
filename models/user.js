@@ -28,7 +28,11 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
-    profilePic: { type: String, default: "/uploads/default.png" },
+    profilePic: { 
+  type: String, 
+  default: "https://res.cloudinary.com/dg0nbbyxb/image/upload/v1694070000/default.png" 
+},
+
 
     // This will automatically store the date of account creation
     createdAt: {

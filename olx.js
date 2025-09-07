@@ -1,36 +1,36 @@
-// open this clone --> https://olx-clone-1-skdc.onrender.com
+const express = require("express");
+const path = require("path");
+const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
+require("dotenv").config(); // <-- load .env variables
 
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
-const mongoose = require('mongoose');
-const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
-require('dotenv').config(); // <-- load .env variables
-
-const rootDir = require('./utils/pathUtils');
-const userLoginRouter = require('./routes/userLoginRoutes');
-const dashboardRouter = require('./routes/dashBoardRoutes');
-const sellRouter = require('./routes/sellroutes');
+// Import routes
+const rootDir = require("./utils/pathUtils");
+const userLoginRouter = require("./routes/userLoginRoutes");
+const dashboardRouter = require("./routes/dashBoardRoutes");
+const sellRouter = require("./routes/sellroutes");
 
 // ---------------- EXPRESS APP ----------------
 const app = express();
-app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.set("view engine", "ejs");
+app.set("views", "views");
 
 // ---------------- SESSION STORE ----------------
 const store = new MongoDBStore({
-  uri: process.env.MONGO_URI,   // from .env
-  collection: 'sessions'
+  uri: process.env.MONGO_URI, // from .env
+  collection: "sessions",
 });
-store.on('error', console.log);
+store.on("error", console.log);
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'mysecret',  // from .env
-  resave: false,
-  saveUninitialized: false,
-  store: store
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "mysecret", // from .env
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
+);
 
 // ---------------- PARSERS ----------------
 app.use(express.json());
@@ -43,10 +43,9 @@ app.use((req, res, next) => {
 });
 
 // ---------------- STATIC ----------------
-app.use(express.static(path.join(rootDir, 'public')));
+app.use(express.static(path.join(rootDir, "public")));
 
-// Serve uploaded images
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// ❌ Remove local /uploads serving (Cloudinary handles hosting)
 
 // ---------------- ROUTES ----------------
 app.use(userLoginRouter);
@@ -56,10 +55,12 @@ app.use(sellRouter);
 // ---------------- DATABASE + SERVER ----------------
 const PORT = process.env.PORT || 3000;
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => {
     app.listen(PORT, () => {
       console.log(`✅ Server running on port ${PORT}`);
     });
   })
-  .catch(err => console.log('❌ Database connection error:', err));
+  .catch((err) => console.log("❌ Database connection error:", err));
+

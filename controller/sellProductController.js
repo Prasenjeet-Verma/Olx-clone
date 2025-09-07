@@ -1,16 +1,16 @@
 const User = require("../models/user");
-const Car = require('../models/cars');
-const Property = require('../models/properties');
+const Car = require("../models/cars");
+const Property = require("../models/properties");
 
 // ---------------- CONTROLLERS ----------------
 
 // ---------------- CATEGORIES ----------------
 exports.getChooseCategory = async (req, res) => {
-  if (!req.isLoggedIn && !req.session.user) return res.redirect('/');
+  if (!req.isLoggedIn && !req.session.user) return res.redirect("/");
   const currentUser = await User.findById(req.session.user._id);
-  if (!currentUser) return res.redirect('/');
-  res.render('chooseCategory', {
-    pageTitle: 'Choose Category',
+  if (!currentUser) return res.redirect("/");
+  res.render("chooseCategory", {
+    pageTitle: "Choose Category",
     isLoggedIn: req.isLoggedIn,
     currentUser,
     currentPath: req.path,
@@ -19,11 +19,11 @@ exports.getChooseCategory = async (req, res) => {
 
 // ---------------- CARS ----------------
 exports.getCarsform = async (req, res) => {
-  if (!req.isLoggedIn && !req.session.user) return res.redirect('/');
+  if (!req.isLoggedIn && !req.session.user) return res.redirect("/");
   const currentUser = await User.findById(req.session.user._id);
-  if (!currentUser) return res.redirect('/');
-  res.render('cars', {
-    pageTitle: 'Cars',
+  if (!currentUser) return res.redirect("/");
+  res.render("cars", {
+    pageTitle: "Cars",
     isLoggedIn: req.isLoggedIn,
     currentUser,
     currentPath: req.path,
@@ -32,50 +32,50 @@ exports.getCarsform = async (req, res) => {
 
 exports.postCarsform = async (req, res) => {
   try {
-    if (!req.isLoggedIn && !req.session.user) return res.redirect('/');
+    if (!req.isLoggedIn && !req.session.user) return res.redirect("/");
     const currentUser = await User.findById(req.session.user._id);
-    if (!currentUser) return res.redirect('/');
+    if (!currentUser) return res.redirect("/");
 
     // Validate required fields
     const { brand, year, fuel, transmission, kmDriven, adTitle, price, state, city } = req.body;
     if (!brand || !year || !fuel || !transmission || !kmDriven || !adTitle || !price || !state || !city) {
-      return res.status(400).send('Please fill all required fields');
+      return res.status(400).send("Please fill all required fields");
     }
 
-    // Map uploaded photos
-    const photoPaths = req.files ? req.files.map(file => '/uploads/' + file.filename) : [];
+    // ✅ Map uploaded photos from Cloudinary
+    const photoPaths = req.files ? req.files.map(file => file.path) : [];
 
     // Create car
     const car = new Car({
       seller: currentUser._id,
       brand,
-      model: req.body.model || "",   // model is optional
+      model: req.body.model || "", // optional
       year,
       fuel,
       transmission,
       kmDriven,
       adTitle,
       price,
-      state,   // ✅ new field
-      city,    // ✅ new field
-      photos: photoPaths
+      state,
+      city,
+      photos: photoPaths,
     });
 
     await car.save();
-    res.redirect('/dashboard');
+    res.redirect("/dashboard");
   } catch (err) {
     console.error(err);
-    res.status(500).send('Database error');
+    res.status(500).send("Database error");
   }
 };
 
 // ---------------- PROPERTIES ----------------
 exports.getPropertiesform = async (req, res) => {
-  if (!req.isLoggedIn && !req.session.user) return res.redirect('/');
+  if (!req.isLoggedIn && !req.session.user) return res.redirect("/");
   const currentUser = await User.findById(req.session.user._id);
-  if (!currentUser) return res.redirect('/');
-  res.render('properties', {
-    pageTitle: 'Properties',
+  if (!currentUser) return res.redirect("/");
+  res.render("properties", {
+    pageTitle: "Properties",
     isLoggedIn: req.isLoggedIn,
     currentUser,
     currentPath: req.path,
@@ -84,19 +84,18 @@ exports.getPropertiesform = async (req, res) => {
 
 exports.postPropertyform = async (req, res) => {
   try {
-    if (!req.isLoggedIn && !req.session.user) return res.redirect('/');
+    if (!req.isLoggedIn && !req.session.user) return res.redirect("/");
     const currentUser = await User.findById(req.session.user._id);
-    if (!currentUser) return res.redirect('/');
+    if (!currentUser) return res.redirect("/");
 
     const { houseType, bhk, adTitle, price, state, city } = req.body;
 
-    // Validate required fields
     if (!houseType || !bhk || !adTitle || !price || !state || !city) {
-      return res.status(400).send('Please fill all required fields');
+      return res.status(400).send("Please fill all required fields");
     }
 
-    // Map uploaded photos
-    const photoPaths = req.files ? req.files.map(file => '/uploads/' + file.filename) : [];
+    // ✅ Map uploaded photos from Cloudinary
+    const photoPaths = req.files ? req.files.map(file => file.path) : [];
 
     // Create property
     const property = new Property({
@@ -110,34 +109,29 @@ exports.postPropertyform = async (req, res) => {
       totalFloors: req.body.totalFloors,
       adTitle,
       price,
-      state,   // ✅ added
-      city,    // ✅ added
-      photos: photoPaths
+      state,
+      city,
+      photos: photoPaths,
     });
 
     await property.save();
-    res.redirect('/dashboard');
+    res.redirect("/dashboard");
   } catch (err) {
     console.error(err);
-    res.status(500).send('Database error');
+    res.status(500).send("Database error");
   }
 };
 
-
 // ---------------- OTHERS ----------------
-
 exports.getAllCars = async (req, res) => {
- if (!req.isLoggedIn && !req.session.user) return res.redirect('/');
-    const currentUser = await User.findById(req.session.user._id);
-    if (!currentUser) return res.redirect('/');
-
+  if (!req.isLoggedIn && !req.session.user) return res.redirect("/");
+  const currentUser = await User.findById(req.session.user._id);
+  if (!currentUser) return res.redirect("/");
 
   try {
-    // Fetch all cars and populate seller info (username or email)
-    const cars = await Car.find().populate('seller', 'username mobileno'); 
-
-    res.render('carsmarket', {
-      pageTitle: 'All Cars',
+    const cars = await Car.find().populate("seller", "username mobileno");
+    res.render("carsmarket", {
+      pageTitle: "All Cars",
       cars,
       isLoggedIn: req.isLoggedIn,
       currentPath: req.path,
@@ -145,19 +139,18 @@ exports.getAllCars = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send('Database error');
+    res.status(500).send("Database error");
   }
 };
 
 exports.getAllProperties = async (req, res) => {
- if (!req.isLoggedIn && !req.session.user) return res.redirect('/');
-    const currentUser = await User.findById(req.session.user._id);
-    if (!currentUser) return res.redirect('/');
+  if (!req.isLoggedIn && !req.session.user) return res.redirect("/");
+  const currentUser = await User.findById(req.session.user._id);
+  if (!currentUser) return res.redirect("/");
   try {
-    // Fetch all properties and populate seller info (username or email)
-    const properties = await Property.find().populate('seller', 'username mobileno');
-    res.render('propertiesmarket', {
-      pageTitle: 'All Properties',
+    const properties = await Property.find().populate("seller", "username mobileno");
+    res.render("propertiesmarket", {
+      pageTitle: "All Properties",
       properties,
       isLoggedIn: req.isLoggedIn,
       currentPath: req.path,
@@ -165,7 +158,8 @@ exports.getAllProperties = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send('Database error');
+    res.status(500).send("Database error");
   }
 };
+
 
