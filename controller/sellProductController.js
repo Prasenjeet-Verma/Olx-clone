@@ -65,6 +65,7 @@ exports.postCarsform = async (req, res) => {
     res.redirect("/dashboard");
   } catch (err) {
     console.error(err);
+    console.error("POST /cars error:", err); // <-- Full error log
     res.status(500).send("Database error");
   }
 };
