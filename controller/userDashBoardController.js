@@ -1,24 +1,10 @@
 const User = require("../models/user");
 const Car = require("../models/cars");
 const Property = require("../models/properties");
-const multer = require("multer");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const cloudinary = require("../config/cloudinary");
-
-// ---------------- MULTER SETUP ----------------
-// Cloudinary storage for profile pictures
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: "olx_profiles",
-    allowed_formats: ["jpg", "jpeg", "png"],
-    public_id: (req, file) => "profile_" + Date.now(),
-  },
-});
-
-const upload = multer({ storage }).single("profileImage");
+const { uploadSingle } = require("../controller/multer"); // ✅ use reusable multer
 
 // ---------------- CONTROLLERS ----------------
+
 exports.getUserDashBoard = async (req, res) => {
   if (!req.isLoggedIn && !req.session.user) return res.redirect("/");
 
@@ -74,11 +60,13 @@ exports.editUserProfile = async (req, res) => {
   });
 };
 
+// ---------------- POST Edit Profile ----------------
 exports.postEditUserProfile = (req, res) => {
   if (!req.isLoggedIn && !req.session.user)
     return res.status(401).send("Login required");
 
-  upload(req, res, async (err) => {
+  // ✅ use the reusable uploadSingle middleware from multer.js
+  uploadSingle(req, res, async (err) => {
     if (err) return res.status(500).send("Error uploading file.");
 
     const { username } = req.body;
@@ -103,6 +91,7 @@ exports.postEditUserProfile = (req, res) => {
     }
   });
 };
+
 
 exports.getCarDetails = async (req, res) => {
   try {
