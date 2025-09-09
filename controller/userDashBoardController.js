@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const Car = require("../models/cars");
 const Property = require("../models/properties");
-const { uploadSingle } = require("../controller/multer"); // ✅ use reusable multer
+const { uploadSingle } = require("./multer"); // ✅ use reusable multer
 
 // ---------------- CONTROLLERS ----------------
 
