@@ -83,43 +83,74 @@ exports.getPropertiesform = async (req, res) => {
   });
 };
 
+// inside your controller file (replace existing postPropertyform)
 exports.postPropertyform = async (req, res) => {
   try {
     if (!req.isLoggedIn && !req.session.user) return res.redirect("/");
+
+    // Debug logs: show body + files
+    console.log("== POST /postproperty received ==");
+    console.log("req.body:", req.body);
+    console.log("req.files:", Array.isArray(req.files) ? req.files.map(f => ({ originalname: f.originalname, path: f.path, size: f.size })) : req.files);
+
     const currentUser = await User.findById(req.session.user._id);
-    if (!currentUser) return res.redirect("/");
+    if (!currentUser) {
+      console.log("User not found in session:", req.session.user && req.session.user._id);
+      return res.redirect("/");
+    }
 
+    // Required fields
     const { houseType, bhk, adTitle, price, state, city } = req.body;
-
     if (!houseType || !bhk || !adTitle || !price || !state || !city) {
+      console.log("Validation failed: missing required field");
       return res.status(400).send("Please fill all required fields");
     }
 
-    // ✅ Map uploaded photos from Cloudinary
-    const photoPaths = req.files ? req.files.map(file => file.path) : [];
+    // Map uploaded files -> Cloudinary returned paths (multer-storage-cloudinary sets file.path)
+    const photoPaths = Array.isArray(req.files) ? req.files.map(file => file.path || file.secure_url || file.url) : [];
+    console.log("photoPaths:", photoPaths);
 
-    // Create property
-    const property = new Property({
+    // Build property object (coerce numbers)
+    const propertyData = {
       seller: currentUser._id,
       houseType,
-      bhk,
-      bathrooms: req.body.bathrooms,
-      furnishing: req.body.furnishing,
-      projectStatus: req.body.projectStatus,
-      listedBy: req.body.listedBy,
-      totalFloors: req.body.totalFloors,
+      bhk: Number(bhk),
+      bathrooms: req.body.bathrooms ? Number(req.body.bathrooms) : undefined,
+      furnishing: req.body.furnishing || undefined,
+      projectStatus: req.body.projectStatus || undefined,
+      listedBy: req.body.listedBy || undefined,
+      totalFloors: req.body.totalFloors ? Number(req.body.totalFloors) : undefined,
       adTitle,
-      price,
+      price: Number(price),
       state,
       city,
       photos: photoPaths,
-    });
+    };
 
+    // Remove undefined fields (optional)
+    Object.keys(propertyData).forEach(k => propertyData[k] === undefined && delete propertyData[k]);
+
+    // Save
+    const property = new Property(propertyData);
     await property.save();
-    res.redirect("/dashboard");
+    console.log("Property saved, id:", property._id);
+    return res.redirect("/dashboard");
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Database error");
+    // More detailed error logging
+    console.error("POST /postproperty - ERROR:", err);
+
+    // Multer file-size or limit error handling
+    if (err && err.code === "LIMIT_FILE_SIZE") {
+      return res.status(400).send("One of the uploaded files is too large. Max allowed size is 5MB.");
+    }
+
+    // Mongoose validation error: print details
+    if (err && err.name === "ValidationError") {
+      console.error("Mongoose validation errors:", err.errors);
+      return res.status(400).send("Validation error: " + Object.values(err.errors).map(e => e.message).join(", "));
+    }
+
+    return res.status(500).send("Internal server error");
   }
 };
 
