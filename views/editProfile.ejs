@@ -25,8 +25,8 @@
         </label>
         <input 
           type="file" 
-          name="profilePic" 
-          id="profilePic" 
+          name="profileImage" 
+          id="profileImage" 
           accept="image/*" 
           class="hidden" 
         />
@@ -66,7 +66,7 @@
 
   <!-- Optional: Instant Preview -->
   <script>
-    document.getElementById("profilePic").addEventListener("change", function(event) {
+    document.getElementById("profileImage").addEventListener("change", function(event) {
       const file = event.target.files[0];
       if (file) {
         document.getElementById("previewImage").src = URL.createObjectURL(file);
