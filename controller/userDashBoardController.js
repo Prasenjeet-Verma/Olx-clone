@@ -65,9 +65,11 @@ exports.postEditUserProfile = (req, res) => {
   if (!req.isLoggedIn && !req.session.user)
     return res.status(401).send("Login required");
 
-  // ✅ use the reusable uploadSingle middleware from multer.js
   uploadSingle(req, res, async (err) => {
-    if (err) return res.status(500).send("Error uploading file.");
+    if (err) {
+      console.error("Multer/Cloudinary Error:", err); // 🟢 Debug log
+      return res.status(500).send("Error uploading file.");
+    }
 
     const { username } = req.body;
     const userId = req.session.user._id;
@@ -86,12 +88,11 @@ exports.postEditUserProfile = (req, res) => {
       await User.findByIdAndUpdate(userId, updateData, { new: true });
       res.redirect("/userprofile");
     } catch (error) {
-      console.error(error);
+      console.error("Database Error:", error);
       res.status(500).send("Database error.");
     }
   });
 };
-
 
 exports.getCarDetails = async (req, res) => {
   try {
